@@ -1,0 +1,388 @@
+An Overview of quanteda
+========================================================
+author: Ken Benoit
+date: 2017-11-15
+autosize: true
+css: custom.css
+font-family: arial
+
+quantitative text analysis using R
+-------------------------------------------
+
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 100)
+require(quanteda)
+knitr::opts_chunk$set(fig.align = 'center', 
+                      out.width = "600px",
+                      size = 'scriptsize', 
+                      collapse = TRUE, 
+                      comment = "##")
+```
+
+
+YATAP ??
+========================================================
+(Why) Yet Another Text Analysis Package?
+
+- **quanteda**: An R package for the quantitative analysis of textual data
+- First developed in 2012, ERC funded academic research
+- Idea: compete not with other text analysis R packages, but rather with Python's **nltk**
+- Provide basic-level complete functionality for NLP, integrated with higher-level analytic tools
+- Follow good practice, by being:
+    + *R-like*
+    + *flexible*, *consistent*, and *fast*
+    + *inter-operable* with other packages
+    + *reproducible* and *transparent* workflow
+
+
+```{r echo = FALSE}
+docnames(data_corpus_irishbudget2010) <-
+    gsub("^2010_BUDGET_0._", "", docnames(data_corpus_irishbudget2010))
+docvars(data_corpus_irishbudget2010, c("year", "debate")) <- NULL
+```
+
+R-like
+========================================================
+```{r size = "scriptsize", out.width = "90%"}
+summary(data_corpus_irishbudget2010, 5)
+```
+
+```{r out.width = "90%"}
+ndoc(data_corpus_irishbudget2010)
+(data_dfm_irishbudget2010 <- dfm(data_corpus_irishbudget2010))
+nfeature(data_dfm_irishbudget2010)
+```
+
+R-like (cont.)
+========================================================
+```{r}
+(toks <- tokens(c(d1 = "Once upon a time.",
+                  d2 = "There was a UseR! conference."),
+                remove_punct = TRUE))
+
+is.tokens(toks)
+
+as.character(toks)
+```
+
+
+flexible
+========================================================
+- different object types work very well together, in an integrated way
+- easy to coerce special **quanteda** objects to standard R objects
+- all functions can be **piped** using `%>%`
+
+consistent
+========================================================
+-  very consistent grammar, for functions and inputs and returns
+-  very consistent naming scheme
+    e.g. `data_corpus_inaugural`, `data_dfm_lbgexample`
+-  common approaches across functions
+
+fast
+========================================================
+- lots of core workhorse functions written in C++
+- uses **stringi** for all string handling
+- uses sparse matrix operations through **Matrix** package
+- many functions exploit the power and speed of **data.table**
+
+compatibility with other packages
+========================================================
+- conformity to the [Text Interchange Format](https://github.com/ropensci/tif)
+- easy to coerce classes to standard R objects
+- `corpus()` can be constructed from a **tm** corpus
+- import/export methods exist in **tidytext**
+- `convert()` will export foreign document-feature matrixes for:
+    + **lda** package
+    + **tm**'s `DocumentTermMatrix`
+    + the `dtm` format of the **topicmodels** package
+    + **lsa**'s `textmatrix` package
+    + the wonky list used by **stm**, including covariates within the `dfm`
+
+
+corpus: a repository for texts and associated data
+========================================================
+- Holds text and all associated data
+- Very easy to create: input `character`, `data.frame`, **tm** corpus, or another corpus
+- Takes both document variables ("docvars) and corpus meta-data
+
+corpus: example
+========================================================
+```{r}
+txt <- c(doc1 = "This is my first doc.  Contains two sentences.",
+         doc2 = "The second doc is just one sentence.",
+         doc3 = "One.  Two.  Three.  Jump!")
+
+corpus(txt)
+
+mycorp <- corpus(txt, docvars = data.frame(day = c("a", "a", "b")))
+mycorp
+
+summary(mycorp)
+```
+
+corpus functions
+========================================================
+| name              | function                                    |
+|-------------------|-------------------------------------------- |
+| `corpus`          | construct a corpus                          |
+| `corpus_reshape`	| recast the document units of a corpus       |
+| `corpus_sample`	| randomly sample documents from a corpus     |
+| `corpus_segment`	| segment texts into component elements       |
+| `corpus_subset`	| extract a subset of a corpus                |
+| `corpus_trim`	    | remove sentences based on their token lengths or a pattern match |
+
+
+character functions
+========================================================
+| name           | function                                    |
+|----------------|-------------------------------------------- |
+| `char_tolower`   | convert the case of character objects |
+| `char_toupper`   | convert the case of character objects |
+| `char_trim`	     | remove sentences based on their token lengths or a pattern match |
+| `char_wordstem`	 | stem the terms in an object |
+
+tokens
+========================================================
+
+Very flexible options, e.g.
+```{r eval = FALSE}
+tokens(x, remove_punct = TRUE, remove_numbers = TRUE)
+```
+
+
+| option            | default |
+| ------------------|---------|
+| `remove_numbers`    | `FALSE` |
+| `remove_punct`      | `FALSE` |
+| `remove_symbols`    | `FALSE` |
+| `remove_separators` | `TRUE`  |
+| `remove_twitter`    | `FALSE` |
+| `remove_hyphens`    | `FALSE` |
+| `remove_url`    | `FALSE` |
+
+Options also exist to create ngrams and skipgrams.
+
+tokens functions
+========================================================
+| name           | function                                    |
+| ---------------|-------------------------------------------- |
+| `tokens`	     | tokenize a set of texts |
+| `tokens_compound` |	convert token sequences into compound tokens |
+| `tokens_lookup` |	apply a dictionary to a tokens object |
+| `tokens_ngrams` |	create ngrams and skipgrams from tokens |
+| `tokens_remove` |	select or remove tokens from a tokens object |
+| `tokens_select` |	select or remove tokens from a tokens object |
+| `tokens_skipgrams` |	create ngrams and skipgrams from tokens |
+| `tokens_tolower` |	convert the case of tokens |
+| `tokens_toupper` |	convert the case of tokens |
+| `tokens_wordstem` |	stem the terms in an object |
+
+
+document-feature matrix (dfm)
+========================================================
+| name            | function                                    |
+| --------------- |-------------------------------------------- |
+| `dfm`           |	create a document-feature matrix            |
+| `dfm_compress`  |	recombine a dfm by identical dimension elements |
+| `dfm_group`     |	recombine a dfm by grouping on a variable   |
+| `dfm_lookup`    |	apply a dictionary to a dfm |
+| `dfm_remove`    |	select features from a dfm or fcm |
+| `dfm_sample`    |	randomly sample documents or features
+| `dfm_select`    |	select features from a dfm or fcm
+| `dfm_smooth`    |	weight the feature frequencies in a dfm
+| `dfm_sort`      |	sort a dfm by frequency of the margins
+| `dfm_tolower`   |	convert the case of the features of a dfm and combine
+| `dfm_toupper`   |	convert the case of the features of a dfm and combine
+| `dfm_trim`      |	trim a dfm using frequency threshold-based feature selection
+| `dfm_weight`    |	weight a dfm, including full SMART scheme, *tf-idf*, etc. in a dfm
+| `dfm_wordstem`  | stem the features in a dfm |
+
+
+feature co-occurrence matrix (fcm)
+========================================================
+name            | function                                    
+--------------- |-------------------------------------------- 
+`fcm`	| create a feature co-occurrence matrix 
+`fcm_compress`	| 	recombine an fcm by identical dimension elements
+`fcm_remove`	| 	select features from an fcm
+`fcm_select`	| 	select features from an fcm
+`fcm_sort`	| 	sort an fcm in alphabetical order of the features
+`fcm_tolower`	| 	convert the case of the features of an fcm and combine
+`fcm_toupper`	| 	convert the case of the features of an fcm and combine`
+
+feature-feature matrix (fcm)
+========================================================
+```{r, out.width = "90%"}
+fcm(c("the cat in the hat ate eggs", "the cat ate a hat"),
+    window = 3, weights = 3:1)
+```
+
+textmodel
+========================================================
+name               | function
+-------------------|-----------------
+`textmodel_ca` |	correspondence analysis of a document-feature matrix
+`textmodel_nb` |	Naive Bayes (multinomial, Bernoulli) classifier for texts
+`textmodel_wordfish` | Slapin and Proksch (2008) text scaling model
+`textmodel_wordscores` |	Laver, Benoit and Garry (2003) text scaling
+`textmodel_wordshoal`	| Lauderdale and Herzog (2017) text scaling model
+`textmodel_affinity`	| (coming soon) Perry and Benoit (2017) class affinity scaling
+`coef.textmodel` | extract coefficients from a `textmodel`
+
+textmodel example
+========================================================
+```{r}
+data(data_corpus_movies, package = "quantedaData")
+summary(data_corpus_movies, 10)
+```
+
+textmodel example (cont.)
+========================================================
+```{r}
+data_corpus_movies_train <- 
+    corpus_subset(data_corpus_movies, Sentiment == "pos") %>%
+    corpus_sample(size = 500) +
+    corpus_subset(data_corpus_movies, Sentiment == "neg") %>%
+    corpus_sample(size = 500)
+data_corpus_movies_train
+```
+
+textmodel example (cont.)
+========================================================
+```{r}
+traindfm <- dfm(data_corpus_movies_train, remove_punct = TRUE, 
+                remove = stopwords("english"), verbose = TRUE)
+nbmod <- textmodel_nb(traindfm, y = docvars(data_corpus_movies_train, "Sentiment"))
+
+testdfm <- dfm(data_corpus_movies, verbose = TRUE) %>%
+  dfm_select(pattern = traindfm, verbose = TRUE)
+```
+
+textmodel example (cont.)
+========================================================
+```{r}
+nbpred <- predict(nbmod, newdata = testdfm)
+print(nbpred, 10)
+
+table(nbpred$nb.predicted, docvars(data_corpus_movies, "Sentiment"))
+```
+
+
+textstat
+========================================================
+
+name               | function
+-------------------|-----------------
+`textstat_collocations` |	calculate collocation statistics
+`textstat_dist` |	distance computation between documents or features
+`textstat_keyness` |	calculate keyness statistics
+`textstat_lexdiv` |	calculate lexical diversity
+`textstat_readability` |	calculate readability
+`textstat_simil` |	similarity computation between documents or features
+
+textplot
+========================================================
+name               | function
+-------------------|-----------------
+`textplot_scale1d` |	plot a fitted scaling model
+`textplot_wordcloud` |	plot features as a wordcloud
+`textplot_xray` |	plot the dispersion of key word(s)
+`textplot_keyness` | plot association of words with target v. reference set
+
+
+kwic
+========================================================
+Key words in context - great exploratory tool:
+```{r}
+kwic(data_corpus_inaugural, "terror*", 3)
+```
+
+kwic (cont.)
+========================================================
+Can plot word occurrence as an "x-ray" plot:
+```{r fig.width = 10}
+godkwic <- kwic(corpus_subset(data_corpus_inaugural, Year > 1960), "god", 3)
+head(godkwic)
+```
+```{r eval = FALSE}
+textplot_xray(godkwic, scale = "relative")
+```
+
+
+kwic (cont.)
+========================================================
+<img src = "xray.png" width = "80%">
+
+nfunctions
+========================================================
+name               | function
+-------------------|-----------------
+`ndoc` |	count the number of documents or features
+`nfeature` |	count the number of documents or features
+`nscrabble` |	count the Scrabble letter values of text
+`nsentence` |	count the number of sentences
+`nsyllable` |	count syllables in a text
+`ntoken` |	count the number of tokens or types
+`ntype` |	count the number of tokens or types
+
+nfunctions (cont)
+========================================================
+
+```{r}
+nscrabble("quioxtic")
+```
+
+functions for dictionary analysis
+========================================================
+```{r}
+mydict1 <- dictionary(file = "~/Dropbox/QUANTESS/dictionaries/LIWC/LIWC2001_English.dic")
+mydict2 <- as.dictionary(subset(tidytext::sentiments, lexicon == "nrc"))
+
+mydfm <- dfm(data_corpus_inaugural)
+
+dictdfm1 <- dfm_lookup(mydfm, dictionary = mydict1)
+head(dictdfm1)
+
+dictdfm2 <- dfm_lookup(mydfm, dictionary = mydict2)
+head(dictdfm2)
+```
+
+
+companion packages
+========================================================
+* **readtext** for importing text files
+
+```{r}
+rt <- readtext::readtext("~/Dropbox/QUANTESS/corpora/UDHR/*.pdf",
+                         docvarsfrom = "filenames")
+rt
+corpus(rt)
+```
+
+companion packages
+========================================================
+* **spacyr** for tagging parts of speech, parsing dependencies
+```{r}
+library(spacyr)
+spacy_initialize()
+
+sp <- spacy_parse("President Trump tweeted again this morning about North Korea.")
+
+entity_consolidate(sp)
+```
+
+
+where to go for more
+====================
+* http://quanteda.io, with additional tutorials
+
+* [GitHub page](http://github.com/kbenoit/quanteda)
+
+* [Demonstration with Chinese language](https://github.com/ropensci/textworkshop17/tree/master/demos/chineseDemo)
+
+* [Demonstration with Japanese language](http://github.com/ropensci/textworkshop17/tree/master/demos/japaneseDemo)
+
+* Twitter [@kenbenoit](http://twitter.com/kenbenoit); Kohei's blog https://koheiw.net
+
