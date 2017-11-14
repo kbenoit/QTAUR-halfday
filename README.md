@@ -15,7 +15,7 @@ You have three options for downloading the course material found on this page:
 
 1.  You can download the materials by clicking on each link.  
 
-2.  You can "clone" repository, using the buttons found to the right side of your browser window as you view this repository.  This is the button labelled "Clone in Desktop".  If you do not have a git client installed on your system, you will need to [get one here](https://git-scm.com/download/gui) and also to make sure that [git is installed](https://git-scm.com/downloads).  This is preferred, since you can refresh your clone as new content gets pushed to the course repository.  (And new material will get actively pushed to the course repository at least once per day as this course takes place.)
+2.  You can "clone" this repository, using the buttons found to the right side of your browser window as you view this repository.  This is the button labelled "Clone in Desktop".  If you do not have a git client installed on your system, you will need to [get one here](https://git-scm.com/download/gui) and also to make sure that [git is installed](https://git-scm.com/downloads).  This is preferred, since you can refresh your clone as new content gets pushed to the course repository.  (And new material will get actively pushed to the course repository at least once per day as this course takes place.)
 
 3.  Statically, you can choose the button on the right marked "Download zip" which will download the entire repository as a zip file.
 
@@ -37,10 +37,7 @@ While it is designed for those who have used R in some form previously, expertis
 
 ### Part 1: Getting Started and Basic Text Analysis
 
-* An [overview of the **quanteda** package](overview/quanteda_overview.html)
-
-Basic Text Analysis:  
-
+* An [overview of the **quanteda** package](overview/quanteda_overview.md)
 *  [Getting started, text import, and basic analysis](1_getting_started/1_getting_started.Rmd)
 *  Study this [**recommended work flow**](1_getting_started/workflow.Rmd) document.
 *  **Exercise:** Step through execution of the [.Rmd file](1_getting_started/1_getting_started.Rmd)
