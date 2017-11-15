@@ -1,0 +1,142 @@
+---
+title: "Basic text analysis"
+author: "Kohei Watanabe"
+date: "15 November 2017"
+output: html_document
+---
+
+```{r}
+require(quanteda)
+load("../data/guardianSample.RData")
+```
+
+You can download [Guardian corpus](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/guardianSample.RData) and save it in you computer.
+
+The corpus is contains 6,000 Guardian news articles from 2012 to 2016.
+```{r}
+ndoc(guardianSample)
+range(docvars(guardianSample, 'date'))
+```
+
+Create a new variables and tokenize:
+
+```{r}
+docvars(guardianSample, 'month') <- format(docvars(guardianSample, 'date'), '%Y%m')
+docvars(guardianSample, 'year') <- format(docvars(guardianSample, 'date'), '%Y')
+
+toks <- tokens(guardianSample)
+toks <- tokens_remove(toks, '[\\p{P}\\p{S}]', valuetype = 'regex', padding = TRUE)
+toks <- tokens_remove(toks, stopwords('english'), padding = TRUE)
+```
+
+## Collocation analysis
+
+By collocation analysis, we can identify multi-word expression that are very frequent in newspapers articles. One of the most common type of multi-word expression is proper names. In English texts, we can identify proper names simply based on capitalization.
+
+```{r}
+toks_cap <- tokens_select(toks, '^[A-Z]', valuetype = 'regex', case_insensitive = FALSE, padding = TRUE)
+col_cap <- textstat_collocations(toks_cap, min_count = 5)
+head(col_cap, 20)
+```
+
+### Compund multi-word expressions
+
+The result of collocation analysis is not only interesting but useful: you can be use the output to compound tokens. Compounding tokens makes tokens less ambiguous and significantly improves quality of statistical analysis. We will only compound strongly associated (p<0.998) multi-word expressions by sub-setting `col_cap$collocation`.
+
+```{r}
+toks_comp <- tokens_compound(toks, phrase(col_cap$collocation[col_cap$z > 3]))
+toks[['text7005']][370:450] # before compounding
+toks_comp[['text7005']][370:450] # after compuding
+```
+
+## Relateve frequency analysis
+
+Keyness is a statistical measure originally implemented in [WordSmith](http://www.lexically.net/wordsmith/) to discover frequent words in target documents. 
+
+### Frequenty words in Guaridan in 2016.
+
+```{r}
+dfm_news <- dfm(toks_comp)
+key_2016 <- textstat_keyness(dfm_news, docvars(dfm_news, 'year') == 2016) 
+head(key_2016, 20)
+```
+
+### Frequent words on Brexit
+
+We can also compare frequency of words in text segments using by Keyness measure by `window` argument of `tokens_select()`. 
+
+```{r}
+toks_brexit <- tokens_select(toks_comp, 'brexit', selection = 'keep', window = 10)
+toks_not_brexit <- tokens_select(toks_comp, 'brexit', selection = 'remove', window = 10)
+print(toks_brexit[['text173244']])
+
+dfm_brexti <- dfm(toks_brexit)
+dfm_not_brexit <- dfm(toks_not_brexit)
+
+key_brexit <- textstat_keyness(rbind(dfm_brexti, dfm_not_brexit), seq_len(ndoc(dfm_brexti)))
+key_brexit <- key_brexit[key_brexit$n_target > 10,]
+head(key_brexit, 20)
+```
+
+### Frequent words on Trump
+
+Combining `textstat_keyness()` and `tokens_select()` might look complex, but can be done in three lines.
+
+```{r}
+dfm_trump <- dfm(tokens_keep(toks_comp, c('donald_trump', 'trump'), window = 10))
+dfm_not_trump <- dfm(tokens_remove(toks_comp, c('donald_trump', 'trump'), window = 10))
+key_trump <- textstat_keyness(rbind(dfm_trump, dfm_not_trump), seq_len(ndoc(dfm_trump)))
+head(key_trump[key_trump$n_target > 10,], 20)
+```
+
+##  Sentiment analysis
+
+Sentiment analysis is one of the most popular dictionary-based analysis. With Lexicoder Sentiment Dictionary  (created by Young and Soroka) included in **quanteda**, sentiment analysis is very easy done.
+
+```{r}
+lengths(data_dictionary_LSD2015)
+
+toks_lsd <- tokens_lookup(toks, data_dictionary_LSD2015)
+head(toks_lsd, 2)
+
+dfm_lsd <- dfm(toks_lsd)
+head(dfm_lsd, 2)
+```
+
+### Aggreate frequency counts
+
+We can aggregate frequency count using `groups` argument in `dfm`.
+
+```{r}
+dfm_lsd_year <- dfm(toks_lsd, groups = docvars(toks_lsd, 'year'))
+head(dfm_lsd_year)
+```
+
+### Targetted analysis
+
+You can use `tokens_select()` with `window` argument to perform more targeted sentiment analysis.
+
+```{r}
+dfm_lsd_brexit <- dfm(toks_brexit, dictionary = data_dictionary_LSD2015[1:2], 
+                      groups = docvars(toks_brexit, 'month'))
+dfm_lsd_brexit <- tail(dfm_lsd_brexit[order(docnames(dfm_lsd_brexit))], 24) # last 24 month only
+
+matplot(dfm_lsd_brexit[,c(1:2)], type = 'l', xaxt = 'n', lty = 1, 
+        main = 'Sentiment on Brexit', ylab = 'Frequency')
+grid()
+axis(1, 1:24, docnames(dfm_lsd_brexit))
+legend('topleft', col = 1:2, legend = c('Negative', 'Positive'), lty = 1)
+```
+
+
+```{r}
+dfm_lsd_trump <- dfm(tokens_keep(toks_comp, c('donald_trump', 'trump'), window = 10), 
+                     dictionary = data_dictionary_LSD2015[1:2], groups = docvars(toks_comp, 'month'))
+dfm_lsd_trump <- tail(dfm_lsd_trump[order(docnames(dfm_lsd_trump))], 24) # last 24 month only
+
+matplot(dfm_lsd_trump, type = 'l', xaxt = 'n', lty = 1, 
+        main = 'Sentiment on Trump', ylab = 'Frequency')
+grid()
+axis(1, 1:24, docnames(dfm_lsd_trump))
+legend('topleft', col = 1:2, legend = c('Negative', 'Positive'), lty = 1)
+```
