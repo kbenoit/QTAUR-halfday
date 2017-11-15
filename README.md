@@ -38,7 +38,7 @@ While it is designed for those who have used R in some form previously, expertis
 ### Part 1: Getting Started and Basic Text Analysis
 
 * An [overview of the **quanteda** package](overview/quanteda_overview.md)
-*  [Getting started, text import, and basic analysis](1_getting_started/1_getting_started.Rmd)
+*  [Getting started, text import, and basic analysis](1_getting_started/1_getting_started.md)
 
 #### Interactive
 
@@ -54,7 +54,6 @@ Step through a simple analysis:
     *  [inaugTexts.csv](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/inaugTexts.csv)  
     *  [tweetSample.RData](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/tweetSample.RData)
 
-### Additional resources
 
 
 ### Part 2: Descriptive text analysis using R
