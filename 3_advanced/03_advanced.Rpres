@@ -1,0 +1,182 @@
+Advanced analysis using quanteda
+========================================================
+author: Ken Benoit
+date: 2017-11-15
+autosize: true
+css: custom.css
+font-family: arial
+
+
+
+```{r set-options, echo=FALSE, cache=FALSE}
+# options(width = 100)
+library("quanteda")
+knitr::opts_chunk$set(fig.align = 'center', 
+                      out.width = "600px",
+                      size = 'scriptsize', 
+                      collapse = TRUE, 
+                      comment = "##")
+```
+
+
+Advanced analysis using quanteda
+================================
+
+**quanteda** has the following advanced functionality:
+
+* extensive weighting functions, such as _tf-idf_
+* extensive feature selection options, using fixed matching, "glob" matching, and regular expression matching
+* ability to constuct a feature co-occurrence matrix, including weighted variations 
+    - for input to _word2vec_, **text2vec**, etc.
+
+"textual statistics" functions
+==============================
+
+name               | function
+-------------------|-----------------
+`textstat_collocations` |	calculate collocation statistics
+`textstat_dist` |	distance computation between documents or features
+`textstat_keyness` |	calculate keyness statistics
+`textstat_lexdiv` |	calculate lexical diversity
+`textstat_readability` |	calculate readability
+`textstat_simil` |	similarity computation between documents or features
+
+"text model" functions
+======================
+
+name               | function
+-------------------|-----------------
+`textmodel_ca` |	correspondence analysis of a document-feature matrix
+`textmodel_nb` |	Naive Bayes (multinomial, Bernoulli) classifier for texts
+`textmodel_wordfish` | Slapin and Proksch (2008) text scaling model
+`textmodel_wordscores` |	Laver, Benoit and Garry (2003) text scaling
+`textmodel_wordshoal`	| Lauderdale and Herzog (2017) text scaling model
+`textmodel_affinity`	| (coming soon) Perry and Benoit (2017) class affinity scaling
+`coef.textmodel` | extract coefficients from a `textmodel`
+
+text plotting functions
+=======================
+
+name               | function
+-------------------|-----------------
+`textplot_scale1d` |	plot a fitted scaling model
+`textplot_wordcloud` |	plot features as a wordcloud
+`textplot_xray` |	plot the dispersion of key word(s)
+`textplot_keyness` | plot association of words with target v. reference set
+
+works very well with other packages
+===================================
+
+* `convert()` will transform a **quanteda** `dfm` into any number of "foreign" formats
+* can convert to and from the "tidy" format of the **tidytext** package
+
+Example 1: Text scaling with "Wordfish"
+=======================================
+
+```{r}
+data_dfm_irishbudget2010 <- dfm(data_corpus_irishbudget2010, 
+                                remove_punct = TRUE, 
+                                remove_numbers = TRUE, 
+                                remove = stopwords("english"),
+                                verbose = TRUE)
+wfm <- textmodel_wordfish(data_dfm_irishbudget2010, dir = c(6, 5))
+```
+
+
+====
+
+```{r}
+summary(wfm)
+```
+
+====
+
+```{r}
+textplot_scale1d(wfm)
+```
+
+====
+
+```{r}
+textplot_scale1d(wfm, groups = docvars(data_corpus_irishbudget2010, "party"))
+```
+
+====
+
+```{r}
+textplot_scale1d(wfm, margin = "features",
+                 highlighted = c("budget", "productivity", "economy", 
+                                 "societies", "screwed", "christmas"))
+```
+
+Example 2: Text scaling with "Wordscores"
+=========================================
+
+```{r}
+wsm <- textmodel_wordscores(data_dfm_irishbudget2010, 
+                            y = c(1, NA, NA, -1, rep(NA, 10)), smooth = 1)
+wsp <- predict(wsm, rescaling = "mv")
+wsp
+```
+
+
+==================
+
+```{r}
+textplot_scale1d(wsp, groups = docvars(data_corpus_irishbudget2010, "party"))
+```
+
+Example 3: Topic models with movie reviews
+==========================================
+
+```{r}
+data(data_corpus_movies, package = "quantedaData")
+data_corpus_movies
+
+# prepare the dfm
+moviesDfm <- dfm(data_corpus_movies, remove = stopwords("SMART")) %>%
+  dfm_trim(min_count = 5)
+moviesDfm
+```
+
+====
+
+```{r eval = FALSE}
+# MCMC and model tuning parameters
+K <- 20
+G <- 5000
+alpha <- 0.02
+eta <- 0.02
+
+# convert to lda format
+moviesDfmlda <- convert(moviesDfm, to = "lda")
+# fit the model
+library("lda")
+set.seed(357)
+t1 <- Sys.time()
+fit <- lda.collapsed.gibbs.sampler(documents = moviesDfmlda$documents, K = K, 
+                                   vocab = moviesDfmlda$vocab, 
+                                   num.iterations = G, alpha = alpha, 
+                                   eta = eta, initial = NULL, burnin = 0,
+                                   compute.log.likelihood = TRUE)
+t2 <- Sys.time()
+t2 - t1  # about 14 minutes on Ken's MacBook Pro
+```
+
+====
+
+```{r eval = FALSE}
+library("LDAvis")
+# create the JSON object to feed the visualization:
+json <- createJSON(phi = t(apply(t(fit$topics) + eta, 2, function(x) x/sum(x))), 
+                   theta = t(apply(fit$document_sums + alpha, 2, function(x) x/sum(x))), 
+                   doc.length = ntoken(moviesDfm), 
+                   vocab = featnames(moviesDfm), 
+                   term.frequency = colSums(moviesDfm))
+serVis(json, out.dir = "visColl", open.browser = TRUE)
+```
+
+====
+
+[View the resulting visualization](3_advanced/visColl/index.html)
+
