@@ -1,5 +1,5 @@
 ---
-title: "Basic text analysis"
+title: "Part 2: Basic text analysis using collocation, keyness and dictionary"
 author: "Kohei Watanabe"
 date: "15 November 2017"
 output: html_document
@@ -10,7 +10,7 @@ require(quanteda)
 load("../data/guardianSample.RData")
 ```
 
-You can download [Guardian corpus](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/guardianSample.RData) and save it in you computer.
+You can also download [Guardian corpus](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/guardianSample.RData) and save it in you computer.
 
 The corpus is contains 6,000 Guardian news articles from 2012 to 2016.
 ```{r}
@@ -46,14 +46,14 @@ The result of collocation analysis is not only interesting but useful: you can b
 ```{r}
 toks_comp <- tokens_compound(toks, phrase(col_cap$collocation[col_cap$z > 3]))
 toks[['text7005']][370:450] # before compounding
-toks_comp[['text7005']][370:450] # after compuding
+toks_comp[['text7005']][370:450] # after compounding
 ```
 
 ## Relateve frequency analysis
 
 Keyness is a statistical measure originally implemented in [WordSmith](http://www.lexically.net/wordsmith/) to discover frequent words in target documents. 
 
-### Frequenty words in Guaridan in 2016.
+### Frequenty words in 2016
 
 ```{r}
 dfm_news <- dfm(toks_comp)
