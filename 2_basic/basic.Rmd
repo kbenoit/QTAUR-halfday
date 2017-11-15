@@ -25,8 +25,8 @@ docvars(guardianSample, 'month') <- format(docvars(guardianSample, 'date'), '%Y%
 docvars(guardianSample, 'year') <- format(docvars(guardianSample, 'date'), '%Y')
 
 toks <- tokens(guardianSample)
-toks <- tokens_remove(toks, '[\\p{P}\\p{S}]', valuetype = 'regex', padding = TRUE)
-toks <- tokens_remove(toks, stopwords('english'), padding = TRUE)
+toks <- tokens_select(toks, stopwords('english'), select = 'remove', padding = TRUE) 
+toks <- tokens_select(toks, '[\\p{P}\\p{S}]', select = 'remove', valuetype = 'regex', padding = TRUE)
 ```
 
 ## Collocation analysis
@@ -66,8 +66,8 @@ head(key_2016, 20)
 We can also compare frequency of words in text segments using by Keyness measure by `window` argument of `tokens_select()`. 
 
 ```{r}
-toks_brexit <- tokens_select(toks_comp, 'brexit', selection = 'keep', window = 10)
-toks_not_brexit <- tokens_select(toks_comp, 'brexit', selection = 'remove', window = 10)
+toks_brexit <- tokens_keep(toks_comp, 'brexit', window = 10) # equivalent to tokens_select(selection = 'keep')
+toks_not_brexit <- tokens_remove(toks_comp, 'brexit', window = 10) # equivalent to tokens_select(selection = 'remove')
 print(toks_brexit[['text173244']])
 
 dfm_brexti <- dfm(toks_brexit)
