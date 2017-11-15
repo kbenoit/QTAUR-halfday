@@ -2,15 +2,19 @@
 title: "Advanced Text Analysis and Extensions"
 author: "Kenneth Benoit and Paul Nulty"
 date: "27 October 2016"
-output: html_document
+output: github_document
 ---
+
+## Advanced analysis using **quanteda**
+
+Advanced 
 
 In this section we will explore some text analysis and analysis of metadata from a corpus of tweets retrieved from the Twitter API. The tweets are a small sample from a collection of tweets relating to the European Parliament elections of 2015.
 
 Load the data frame containing the sample tweets:
 
 ```{r}
-require(quanteda)
+library("quanteda")
 load("tweetSample.RData")
 str(tweetSample)
 ```

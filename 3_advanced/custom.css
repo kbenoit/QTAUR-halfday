@@ -1,0 +1,10 @@
+body, td {
+        font-size: 26px;
+    }
+pre {
+    font-size: 20px
+}
+
+.reveal code.r {
+  font-size: 18px;
+}
