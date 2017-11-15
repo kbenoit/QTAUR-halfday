@@ -7,7 +7,7 @@ output:
     variant: markdown_github
 ---
 
-#### Preliminaries: Installation
+## Preliminaries: Installation
 
 First, you need to have **quanteda** installed.  You can do this from inside RStudio, from the Tools...Install Packages menu, or simply using
 ```{r, eval = FALSE}
@@ -22,7 +22,7 @@ devtools::install_github("kbenoit/quantedaData")
 ```
 
 
-#### Test your setup
+## Test your setup
 
 Run the rest of this file to test your setup.  You must have quanteda installed in order for this next step to succeed.
 ```{r}
@@ -46,13 +46,14 @@ topfeatures(ie_dfm)
 
 Make a word cloud:
 ```{r, fig.width = 8, fig.height = 8}
-textplot_wordcloud(ie_dfm, min.freq = 25, random.order = FALSE)
+dfm_remove(ie_dfm, "\\p{Z}", valuetype = "regex") %>%
+  textplot_wordcloud(min.freq = 25, random.order = FALSE)
 ```
 
 If you got this far, congratulations!
 
 
-### Three ways to create a `corpus` object
+## Three ways to create a `corpus` object
 
 **quanteda can construct a `corpus` object** from several input sources:
 
@@ -73,7 +74,7 @@ If you got this far, congratulations!
 
     In most cases you will need to load input files from outside of R, so you will use this third method.  The remainder of this tutorial focuses on `textfile()`, which is designed to be a simple, powerful, and all-purpose method to load texts.
 
-### Using **readtext** to import texts
+## Using **readtext** to import texts
 
 In the simplest case, we would like to load a set of texts in plain text files from a single directory. To do this, we use the `readtext()` function from the **readtext** package, and use the "glob"" operator `*` to indicate that we want to load multiple files:
 

@@ -1,4 +1,5 @@
-#### Preliminaries: Installation
+Preliminaries: Installation
+---------------------------
 
 First, you need to have **quanteda** installed. You can do this from
 inside RStudio, from the Tools…Install Packages menu, or simply using
@@ -15,7 +16,8 @@ install.packages("quanteda")
 devtools::install_github("kbenoit/quantedaData")
 ```
 
-#### Test your setup
+Test your setup
+---------------
 
 Run the rest of this file to test your setup. You must have quanteda
 installed in order for this next step to succeed.
@@ -96,14 +98,16 @@ topfeatures(ie_dfm)
 Make a word cloud:
 
 ``` r
-textplot_wordcloud(ie_dfm, min.freq = 25, random.order = FALSE)
+dfm_remove(ie_dfm, "\\p{Z}", valuetype = "regex") %>%
+  textplot_wordcloud(min.freq = 25, random.order = FALSE)
 ```
 
 ![](1_getting_started_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 If you got this far, congratulations!
 
-### Three ways to create a `corpus` object
+Three ways to create a `corpus` object
+--------------------------------------
 
 **quanteda can construct a `corpus` object** from several input sources:
 
@@ -121,7 +125,7 @@ If you got this far, congratulations!
         ##  1793-Washington    96    147         4
         ## 
         ## Source:  /Users/kbenoit/Dropbox (Personal)/GitHub/QTAUR-halfday/1_getting_started/* on x86_64 by kbenoit
-        ## Created: Wed Nov 15 09:02:14 2017
+        ## Created: Wed Nov 15 09:11:28 2017
         ## Notes:   Just G.W.
 
 2.  a `VCorpus` object from the **tm** package, and
@@ -165,7 +169,7 @@ If you got this far, congratulations!
         ##                        <NA> <NA>   <NA>      <NA>
         ## 
         ## Source:  Converted from tm Corpus 'crude'
-        ## Created: Wed Nov 15 09:02:14 2017
+        ## Created: Wed Nov 15 09:11:28 2017
         ## Notes:
 
 3.  a `readtext` object, created by `readtext::readtext()`.
@@ -175,7 +179,8 @@ If you got this far, congratulations!
     focuses on `textfile()`, which is designed to be a simple, powerful,
     and all-purpose method to load texts.
 
-### Using **readtext** to import texts
+Using **readtext** to import texts
+----------------------------------
 
 In the simplest case, we would like to load a set of texts in plain text
 files from a single directory. To do this, we use the `readtext()`
@@ -217,7 +222,7 @@ summary(inaug_corpus, 5)
     ##  text5   804   2381        45  1805-Jefferson.txt 1805  Jefferson
     ## 
     ## Source:  /Users/kbenoit/Dropbox (Personal)/GitHub/QTAUR-halfday/1_getting_started/* on x86_64 by kbenoit
-    ## Created: Wed Nov 15 09:02:16 2017
+    ## Created: Wed Nov 15 09:11:30 2017
     ## Notes:
 
 If the texts and document variables are stored separately, we can easily
@@ -253,7 +258,7 @@ summary(sotu_corpus, 5)
     ##    spoken SOTU  su1793.txt Independent
     ## 
     ## Source:  /Users/kbenoit/Dropbox (Personal)/GitHub/QTAUR-halfday/1_getting_started/* on x86_64 by kbenoit
-    ## Created: Wed Nov 15 09:02:18 2017
+    ## Created: Wed Nov 15 09:11:32 2017
     ## Notes:
 
 Another common case is that our texts are stored alongside the document
@@ -351,5 +356,5 @@ summary(mycorpus)
     ##  text9   346    723        27         UKIP.txt
     ## 
     ## Source:  /Users/kbenoit/Dropbox (Personal)/GitHub/QTAUR-halfday/1_getting_started/* on x86_64 by kbenoit
-    ## Created: Wed Nov 15 09:02:23 2017
+    ## Created: Wed Nov 15 09:11:37 2017
     ## Notes:
