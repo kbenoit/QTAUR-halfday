@@ -1,8 +1,10 @@
 ---
-title: "Example workflow"
+title: "quanteda workflow"
 author: Kenneth Benoit
-date: 14 November 2016
-output: html_document
+date: 15 November 2017
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 This file demonstrates a basic workflow to take some pre-loaded texts and perform elementary text analysis tasks quickly. The **quanteda** package comes with a built-in set of inaugural addresses from US Presidents. We begin by loading quanteda and examining these texts. The `summary` command will output the name of each text along with the number of types, tokens and sentences contained in the text. Below we use R's indexing syntax to selectivly use the summary command on the first five texts.
