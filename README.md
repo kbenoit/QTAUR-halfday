@@ -46,7 +46,7 @@ While it is designed for those who have used R in some form previously, expertis
 Setting up RStudio and **quanteda**:  
 
 *  [CRAN](https://cran.r-project.org) for downloading and installing R
-*  **Configuration test:**  Try running this RMarkdown file: [test_setup.Rmd](1_getting_started/test_setup.Rmd).  If it builds without error and looks like [this](https://rawgit.com/kbenoit/ITAUR-Short/master/1_getting_started/test_setup.html), then you have successfully configured your system.  
+*  **Configuration test:**  Try running this RMarkdown file: [test_setup.Rmd](1_getting_started/test_setup.Rmd).  If it builds without error and looks like [this](https://rawgit.com/kbenoit/QTAUR-halfday/master/1_getting_started/test_setup.html), then you have successfully configured your system.  
 
 Step through a simple analysis:  
 *  Step through execution of the [1_getting_started/1_getting_started.Rmd](1_getting_started/1_getting_started.Rmd) file.  (This requires that you use RStudio and have installed the **knitr** and **rmarkdown** packages, but if you try to click the "Knit" button and have not yet installed these, the program will prompt you to do so.)
@@ -57,11 +57,11 @@ Step through a simple analysis:
 
 ## Part 2: Basic text analysis using collocation, keyness and dictionary
 
-*  [Basic analysis of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_basic/2_basic.html)
+*  [Basic analysis of texts](https://rawgit.com/kbenoit/QTAUR-halfday/master/2_basic/2_basic.html)
 
 ## Part 3: Advanced analysis and working with other text packages
 
-*  [Advanced analysis and working with other packages](https://rawgit.com/kbenoit/ITAUR-Short/master/3_advanced/advanced.html)
+*  [Advanced analysis and working with other packages](https://rawgit.com/kbenoit/QTAUR-halfday/master/3_advanced/advanced.html)
 *  **Twitter analysis example**, and the instructions for setting up your own Twitter app, in [Twitter.Rmd](3_advanced/Twitter.Rmd). 
 
 ### Interactive: Step through execution of the [.Rmd file](3_advanced/advanced.Rmd)
