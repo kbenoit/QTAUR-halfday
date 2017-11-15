@@ -1,4 +1,4 @@
-## Quantitative Text Analysis Using R: A Half-Day Tutorial
+# Quantitative Text Analysis Using R: A Half-Day Tutorial
 
 [Kenneth Benoit](kbenoit@lse.ac.uk), Department of Methodology, LSE  
 [Kohei Watanabe](K.Watanabe1@lse.ac.uk), Department of Methodology, LSE  
@@ -9,7 +9,7 @@
 
 This repository contains the workshop materials for a half-day tutorial *Quantitative to Text Analysis Using R*.  This project was supported through European Research Council grant ERC-2011-StG 283794-QUANTESS.
 
-### Instructions for using this resource
+## Instructions for using this resource
 
 You have three options for downloading the course material found on this page:  
 
@@ -21,7 +21,7 @@ You have three options for downloading the course material found on this page:
 
 You can also subscribe to the repository if you have [a GitHub account](https://github.com), which will send you updates each time new changes are pushed to the repository.
 
-### Objectives
+## Objectives
 
 This workshop covers how to perform common text analysis and natural language processing tasks using R.  When used properly, R is a fast and powerful tool for managing even very large text analysis tasks.  
 
@@ -30,17 +30,18 @@ The course consists of instructor presentations in three sets, followed by inter
 We will cover how to format and input source texts, how to structure their metadata, and how to prepare them for analysis.  This includes common tasks such as tokenisation, including constructing ngrams and "skip-grams", removing stopwords, stemming words, and other forms of feature selection.  We show how to: get summary statistics from text, search for and analyse keywords and phrases, analyse text for lexical diversity and readability,  detect collocations, apply dictionaries, and measure term and document associations using distance measures.  Our analysis covers basic text-related data processing in the R base language, but most relies on the [**quanteda**](http://quanteda.io) package for the quantitative analysis of textual data.  We also discuss (briefly) how to pass the structured objects from **quanteda** into other text analytic packages for doing topic modelling, latent semantic analysis, regression models, and other forms of machine learning.
 
 
-### Prerequisites
+## Prerequisites
 
 While it is designed for those who have used R in some form previously, expertise in R is not required, and even those with no previous knowledge of R are welcome.
 
 
-### Part 1: Getting Started and Basic Text Analysis
+## Part 1: Getting Started and Basic Text Analysis
 
-* An [overview of the **quanteda** package](overview/quanteda_overview.md)
-*  [Getting started, text import, and basic analysis](1_getting_started/1_getting_started.Rmd)
+*  An [overview of the **quanteda** package](overview/quanteda_overview.md)
+*  [Getting started, text import, and basic analysis](1_getting_started/1_getting_started.md)
+*  Some basic **quanteda** [workflow](1_getting_started/workflow.md) guidelines
 
-#### Interactive
+### Interactive
 
 Setting up RStudio and **quanteda**:  
 
@@ -48,16 +49,15 @@ Setting up RStudio and **quanteda**:
 *  **Configuration test:**  Try running this RMarkdown file: [test_setup.Rmd](1_getting_started/test_setup.Rmd).  If it builds without error and looks like [this](https://rawgit.com/kbenoit/ITAUR-Short/master/1_getting_started/test_setup.html), then you have successfully configured your system.  
 
 Step through a simple analysis:  
-*  Step through execution of the [.Rmd file](1_getting_started/1_getting_started.Rmd).  
+*  Step through execution of the [1_getting_started/1_getting_started.Rmd](1_getting_started/1_getting_started.Rmd) file.  (This requires that you use RStudio and have installed the **knitr** and **rmarkdown** packages, but if you try to click the "Knit" button and have not yet installed these, the program will prompt you to do so.)
 *  Sample data files: 
     *  [SOTU_metadata.csv](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/SOTU_metadata.csv)  
     *  [inaugTexts.csv](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/inaugTexts.csv)  
     *  [tweetSample.RData](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/tweetSample.RData)
 
-### Additional resources
 
 
-### Part 2: Descriptive text analysis using R
+## Part 2: Descriptive text analysis using R
 
 *  [Descriptive analysis of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_descriptive/2_descriptive.html)  
 
@@ -65,17 +65,17 @@ You also might want to look at the following:
 
 *  [More manipulation of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_descriptive/text_manipulation.html)  
 
-#### Interactive
+### Interactive
 
 *  Step through execution of the [2_descriptive.Rmd](2_descriptive/2_descriptive.Rmd) file.
 
 
-### Part 3: Advanced analysis and working with other text packages
+## Part 3: Advanced analysis and working with other text packages
 
 *  [Advanced analysis and working with other packages](https://rawgit.com/kbenoit/ITAUR-Short/master/3_advanced/advanced.html)
 *  **Twitter analysis example**, and the instructions for setting up your own Twitter app, in [Twitter.Rmd](3_advanced/Twitter.Rmd). 
 
-#### Interactive: Step through execution of the [.Rmd file](3_advanced/advanced.Rmd)
+### Interactive: Step through execution of the [.Rmd file](3_advanced/advanced.Rmd)
 
 
 
