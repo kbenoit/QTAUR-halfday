@@ -55,20 +55,9 @@ Step through a simple analysis:
     *  [inaugTexts.csv](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/inaugTexts.csv)  
     *  [tweetSample.RData](https://github.com/kbenoit/QTAUR-halfday/blob/master/data/tweetSample.RData)
 
+## Part 2: Basic text analysis using collocation, keyness and dictionary
 
-
-## Part 2: Descriptive text analysis using R
-
-*  [Descriptive analysis of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_descriptive/2_descriptive.html)  
-
-You also might want to look at the following:
-
-*  [More manipulation of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_descriptive/text_manipulation.html)  
-
-### Interactive
-
-*  Step through execution of the [2_descriptive.Rmd](2_descriptive/2_descriptive.Rmd) file.
-
+*  [Basic analysis of texts](https://rawgit.com/kbenoit/ITAUR-Short/master/2_basic/2_basic.html)
 
 ## Part 3: Advanced analysis and working with other text packages
 
