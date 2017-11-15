@@ -61,7 +61,8 @@ Step through a simple analysis:
 
 ## Part 3: Advanced analysis and working with other text packages
 
-*  [Advanced analysis and working with other packages](https://rawgit.com/kbenoit/QTAUR-halfday/master/3_advanced/advanced.html)
+*  [Advanced analysis and working with other packages](3_advanced/03_advanced.md)
+*  [as slides](https://rawgit.com/kbenoit/QTAUR-halfday/master/3_advanced/03_advanced.html)
 *  **Twitter analysis example**, and the instructions for setting up your own Twitter app, in [Twitter.Rmd](3_advanced/Twitter.Rmd). 
 
 ### Interactive: Step through execution of the [.Rmd file](3_advanced/advanced.Rmd)
