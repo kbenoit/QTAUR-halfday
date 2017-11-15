@@ -22,12 +22,12 @@ range(docvars(guardianSample, 'date'))
 Create new document variables and tokenize texts:
 
 ```{r}
-docvars(guardianSample, 'month') <- format(docvars(guardianSample, 'date'), '%Y%m')
+docvars(guardianSample, 'month') <- format(docvars(guardianSample, 'date'), '%Y-%m')
 docvars(guardianSample, 'year') <- format(docvars(guardianSample, 'date'), '%Y')
 
 toks <- tokens(guardianSample)
 toks <- tokens_select(toks, stopwords('english'), select = 'remove', padding = TRUE) 
-toks <- tokens_select(toks, '[\\p{P}\\p{S}]', select = 'remove', valuetype = 'regex', padding = TRUE)
+toks <- tokens_select(toks, '^[\\p{P}\\p{S}]$', select = 'remove', valuetype = 'regex', padding = TRUE)
 ```
 
 ## Collocation analysis
