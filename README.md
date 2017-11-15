@@ -57,7 +57,7 @@ Step through a simple analysis:
 
 ## Part 2: Basic text analysis using collocation, keyness and dictionary
 
-*  [Basic analysis of texts](https://rawgit.com/kbenoit/QTAUR-halfday/master/2_basic/2_basic.html)
+*  [Basic analysis of texts](https://rawgit.com/kbenoit/QTAUR-halfday/master/2_basic/basic.html)
 
 ## Part 3: Advanced analysis and working with other text packages
 

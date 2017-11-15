@@ -136,7 +136,7 @@ $(document).ready(function () {
 ## 
 ##     View</code></pre>
 <pre class="r"><code>load(&quot;../data/guardianSample.RData&quot;)</code></pre>
-<p>You can download <a href="https://github.com/kbenoit/QTAUR-halfday/blob/master/data/guardianSample.RData">Guardian corpus</a> and save to you computer.</p>
+<p>You can download <a href="https://github.com/kbenoit/QTAUR-halfday/blob/master/data/guardianSample.RData">Guardian corpus</a> and save it in you computer.</p>
 <p>The corpus is contains 6,000 Guardian news articles from 2012 to 2016.</p>
 <pre class="r"><code>ndoc(guardianSample)</code></pre>
 <pre><code>## [1] 6000</code></pre>
@@ -147,8 +147,8 @@ $(document).ready(function () {
 docvars(guardianSample, 'year') &lt;- format(docvars(guardianSample, 'date'), '%Y')
 
 toks &lt;- tokens(guardianSample)
-toks &lt;- tokens_remove(toks, '[\\p{P}\\p{S}]', valuetype = 'regex', padding = TRUE)
-toks &lt;- tokens_remove(toks, stopwords('english'), padding = TRUE)</code></pre>
+toks &lt;- tokens_select(toks, stopwords('english'), select = 'remove', padding = TRUE) 
+toks &lt;- tokens_select(toks, '[\\p{P}\\p{S}]', select = 'remove', valuetype = 'regex', padding = TRUE)</code></pre>
 <div id="collocation-analysis" class="section level2">
 <h2>Collocation analysis</h2>
 <p>By collocation analysis, we can identify multi-word expression that are very frequent in newspapers articles. One of the most common type of multi-word expression is proper names. In English texts, we can identify proper names simply based on capitalization.</p>
@@ -178,7 +178,7 @@ head(col_cap, 20)</code></pre>
 ## 20     south carolina   271      2  9.560901  78.07656</code></pre>
 <div id="compund-multi-word-expressions" class="section level3">
 <h3>Compund multi-word expressions</h3>
-<p>The result of collocation analysis is not only interesting but can be used to compound tokens. Compounding strongly associated tokens makes tokens less ambiguous and significantly improves quality of statistical analysis. We will only compound strongly associated (p&lt;0.998) multi-word expressions by sub-setting <code>col_cap$collocation</code>.</p>
+<p>The result of collocation analysis is not only interesting but useful: you can be use the output to compound tokens. Compounding tokens makes tokens less ambiguous and significantly improves quality of statistical analysis. We will only compound strongly associated (p&lt;0.998) multi-word expressions by sub-setting <code>col_cap$collocation</code>.</p>
 <pre class="r"><code>toks_comp &lt;- tokens_compound(toks, phrase(col_cap$collocation[col_cap$z &gt; 3]))
 toks[['text7005']][370:450] # before compounding</code></pre>
 <pre><code>##  [1] &quot;&quot;              &quot;&quot;              &quot;&quot;              &quot;need&quot;         
@@ -259,10 +259,23 @@ head(key_2016, 20)</code></pre>
 <div id="frequent-words-on-brexit" class="section level3">
 <h3>Frequent words on Brexit</h3>
 <p>We can also compare frequency of words in text segments using by Keyness measure by <code>window</code> argument of <code>tokens_select()</code>.</p>
-<pre class="r"><code>toks_brexit &lt;- tokens_select(toks_comp, 'brexit', selection = 'keep', window = 10)
-toks_not_brexit &lt;- tokens_select(toks_comp, 'brexit', selection = 'remove', window = 10)
-print(toks_brexit[['text169676']])</code></pre>
-<pre><code>## character(0)</code></pre>
+<pre class="r"><code>toks_brexit &lt;- tokens_keep(toks_comp, 'brexit', window = 10) # equivalent to tokens_select(selection = 'keep')
+toks_not_brexit &lt;- tokens_remove(toks_comp, 'brexit', window = 10) # equivalent to tokens_select(selection = 'remove')
+print(toks_brexit[['text173244']])</code></pre>
+<pre><code>##  [1] &quot;said&quot;                &quot;&quot;                    &quot;Airports_Commission&quot;
+##  [4] &quot;&quot;                    &quot;disagreed&quot;           &quot;&quot;                   
+##  [7] &quot;Khan&quot;                &quot;&quot;                    &quot;adding&quot;             
+## [10] &quot;&quot;                    &quot;Brexit&quot;              &quot;loaded&quot;             
+## [13] &quot;&quot;                    &quot;dice&quot;                &quot;&quot;                   
+## [16] &quot;&quot;                    &quot;favour&quot;              &quot;&quot;                   
+## [19] &quot;&quot;                    &quot;west_London&quot;         &quot;location&quot;           
+## [22] &quot;easily&quot;              &quot;&quot;                    &quot;quickly&quot;            
+## [25] &quot;&quot;                    &quot;&quot;                    &quot;&quot;                   
+## [28] &quot;option&quot;              &quot;&quot;                    &quot;&quot;                   
+## [31] &quot;&quot;                    &quot;Brexit&quot;              &quot;makes&quot;              
+## [34] &quot;&quot;                    &quot;&quot;                    &quot;conclusion&quot;         
+## [37] &quot;&quot;                    &quot;&quot;                    &quot;&quot;                   
+## [40] &quot;Heathrow&quot;            &quot;expansion&quot;           &quot;&quot;</code></pre>
 <pre class="r"><code>dfm_brexti &lt;- dfm(toks_brexit)
 dfm_not_brexit &lt;- dfm(toks_not_brexit)
 
@@ -297,7 +310,6 @@ head(key_brexit, 20)</code></pre>
 <pre class="r"><code>dfm_trump &lt;- dfm(tokens_keep(toks_comp, c('donald_trump', 'trump'), window = 10))
 dfm_not_trump &lt;- dfm(tokens_remove(toks_comp, c('donald_trump', 'trump'), window = 10))
 key_trump &lt;- textstat_keyness(rbind(dfm_trump, dfm_not_trump), seq_len(ndoc(dfm_trump)))
-
 head(key_trump[key_trump$n_target &gt; 10,], 20)</code></pre>
 <pre><code>##                        chi2 p n_target n_reference
 ## trump           200500.1635 0     2427           0
