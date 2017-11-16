@@ -56,8 +56,7 @@ We can use the `keptFeatures` argument to `dfm()` to analyse only hashtags for e
 dv <- data.frame(user = juncker$user_screen_name)
 jCorp <- corpus(juncker$text, docvars = dv)
 jd <- dfm(jCorp)
-jd <- selectFeatures(jd, "^#.*", "keep", valuetype = "regex") 
-# equivalent: jd <- selectFeatures(jd, "#*", "keep", valuetype = "glob") 
+jd <- dfm_select(jd, "^#.*", "keep", valuetype = "regex") 
 topfeatures(jd, nfeature(jd))
 ```
 
@@ -65,42 +64,46 @@ topfeatures(jd, nfeature(jd))
 ## Further analysis examples
 Wordscores:
 ```{r}
-data(amicusCorpus, package = "quantedaData")
-refs <- docvars(amicusCorpus, "trainclass")
+data(data_corpus_amicus, package = "quantedaData")
+refs <- docvars(data_corpus_amicus, "trainclass")
 refs <- (as.numeric(refs) - 1.5)*2
-amicusDfm <- dfm(amicusCorpus, verbose = FALSE)
-wm <- textmodel(amicusDfm, y = refs, model = "wordscores")
+amicusDfm <- dfm(data_corpus_amicus, verbose = FALSE)
+wm <- textmodel_wordscores(amicusDfm, y = refs)
 summary(wm)
 preds <- predict(wm, newdata = amicusDfm)
 summary(preds)
-plot(preds@textscores$textscore_raw ~ docvars(amicusCorpus, "testclass"),
+plot(preds@textscores$textscore_raw ~ docvars(data_corpus_amicus, "testclass"),
      horizontal = TRUE, xlab = "Predicted document score",
      ylab = "Test class", las = 1)
 ```
 
 Correspondence analysis:
 ```{r, fig.width = 6, fig.height = 6}
-ieDfm <- dfm(ie2010Corpus, verbose = FALSE)
-ieCA <- textmodel(ieDfm, model = "ca")
+data(data_corpus_irishbudgets, package = "quantedaData")
+data_corpus_irish2011 <- corpus_subset(data_corpus_irishbudgets, year == 2011)
+ieDfm <- dfm(data_corpus_irish2011, verbose = FALSE)
+ieCA <- textmodel_ca(ieDfm)
 require(ca)
 plot(ieCA, what = c("all", "none"))
 ```
 
 Poisson scaling:
 ```{r, fig.width = 6, fig.height = 4}
-ieWF <- textmodel(ieDfm, model = "wordfish")
+ieWF <- textmodel_wordfish(ieDfm)
 summary(ieWF)
 dotchart(ieWF@theta, 
-         labels = paste(docvars(ie2010Corpus, "name"), docvars(ie2010Corpus, "party")))
+         labels = paste(docvars(data_corpus_irish2011, "namefirst"), 
+                        docvars(data_corpus_irish2011, "namelast"), 
+                        docvars(data_corpus_irish2011, "party")))
 ```
 
 
 Topic models:
 ```{r}
 require(topicmodels)
-mycorpus <- subset(inaugCorpus, Year > 1950)
-quantdfm <- dfm(mycorpus, verbose=FALSE, stem=TRUE,
-                ignoredFeatures=c(stopwords('english'),'will','us','nation', 'can','peopl*','americ*'))
+mycorpus <- corpus_subset(data_corpus_inaugural, Year > 1950)
+quantdfm <- dfm(mycorpus, verbose=FALSE, stem = TRUE,
+                remove = c(stopwords('english'),'will','us','nation', 'can','peopl*','americ*'))
 ldadfm <- convert(quantdfm, to="topicmodels")
 lda <- LDA(ldadfm, control = list(alpha = 0.1), k=20)
 terms(lda, 10)
@@ -108,11 +111,11 @@ terms(lda, 10)
 
 ```{r}
 require(stm)
-data(moviesCorpus, package = "quantedaData")
-summary(moviesCorpus, 5)
-movies_dfm <- dfm(moviesCorpus, ignoredFeatures = c(stopwords("SMART")), stem = TRUE)
+data(data_corpus_movies, package = "quantedaData")
+summary(data_corpus_movies, 5)
+movies_dfm <- dfm(data_corpus_movies, remove = c(stopwords("SMART")), stem = TRUE)
 movies_dfm_stm <- convert(movies_dfm, to = "stm", 
-                          docvars = data.frame(sentiment = docvars(moviesCorpus, "Sentiment")))
+                          docvars = data.frame(sentiment = docvars(data_corpus_movies, "Sentiment")))
 stm_fittedmodel <- stm(movies_dfm_stm$documents, movies_dfm_stm$vocab, K = 20, 
                        interactions = FALSE, verbose = FALSE)
 labelTopics(stm_fittedmodel)
