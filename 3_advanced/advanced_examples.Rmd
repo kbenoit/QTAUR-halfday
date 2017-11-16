@@ -1,13 +1,11 @@
 ---
-title: "Advanced Text Analysis and Extensions"
-author: "Kenneth Benoit and Paul Nulty"
-date: "27 October 2016"
+title: "Advanced Examples"
+author: "Kenneth Benoit"
+date: "15 November 2017"
 output: github_document
 ---
 
-## Advanced analysis using **quanteda**
-
-Advanced 
+## Advanced examples
 
 In this section we will explore some text analysis and analysis of metadata from a corpus of tweets retrieved from the Twitter API. The tweets are a small sample from a collection of tweets relating to the European Parliament elections of 2015.
 

@@ -57,12 +57,12 @@ Step through a simple analysis:
 
 ## Part 2: Basic text analysis using collocation, keyness and dictionary
 
-*  [Basic analysis of texts](https://rawgit.com/kbenoit/QTAUR-halfday/master/2_basic/basic.html)
+*  [Basic analysis of texts](https://rawgit.com/kbenoit/QTAUR-halfday/master/2_basic/2_basic.html)
 
 ## Part 3: Advanced analysis and working with other text packages
 
 *  [Advanced analysis and working with other packages](3_advanced/03_advanced.md)
-*  [as slides](https://rawgit.com/kbenoit/QTAUR-halfday/master/3_advanced/03_advanced.html)
+*  [as slides](https://rawgit.com/kbenoit/QTAUR-halfday/master/3_advanced/advanced_rpus.html)
 *  **Twitter analysis example**, and the instructions for setting up your own Twitter app, in [Twitter.Rmd](3_advanced/Twitter.Rmd). 
 
 ### Interactive: Step through execution of the [.Rmd file](3_advanced/advanced.Rmd)

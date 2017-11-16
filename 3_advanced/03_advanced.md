@@ -1,17 +1,4 @@
 Advanced analysis using quanteda
-========================================================
-author: Ken Benoit
-date: 2017-11-15
-autosize: true
-css: custom.css
-font-family: arial
-
-
-
-
-
-
-Advanced analysis using quanteda
 ================================
 
 **quanteda** has the following advanced functionality:
