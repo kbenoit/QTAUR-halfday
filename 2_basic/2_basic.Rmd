@@ -32,7 +32,7 @@ toks <- tokens_select(toks, '^[\\p{P}\\p{S}]$', select = 'remove', valuetype = '
 
 ## Collocation analysis
 
-By collocation analysis, we can identify multi-word expressions that are very frequent in newspapers articles. One of the most common type of multi-word expressions is proper names, which can be identifed simply based on capitalization in English texts.
+By collocation analysis, we can identify multi-word expressions that are very frequent in newspapers articles. One of the most common type of multi-word expressions is proper names, which can be identified simply based on capitalization in English texts.
 
 ```{r}
 cap_toks <- tokens_select(toks, '^[A-Z]', valuetype = 'regex', case_insensitive = FALSE, padding = TRUE)
@@ -52,7 +52,7 @@ comp_toks[['text7005']][370:450] # after compounding
 
 ## Relative frequency analysis
 
-Keyness is a statistical measure originally implemented in [WordSmith](http://www.lexically.net/wordsmith/) to discover frequent words in target documents. This statistic is essentially a signed chi-squre, where words more frequent than expected are given positive sign. 
+Keyness is a statistical measure originally implemented in [WordSmith](http://www.lexically.net/wordsmith/) to discover frequent words in target documents. This statistic is essentially a signed chi-square, where words more frequent than expected are given positive sign. 
 
 ### Frequent words in 2016
 
@@ -94,9 +94,17 @@ head(key_trump[key_trump$n_target > 10,], 20)
 textplot_keyness(key_trump[c(-1, -2, -3),])
 ```
 
-##  Sentiment analysis
+##  Dictionary-based analysis
 
-Sentiment analysis is one of the most popular quantitative text analysis methods. You can use `tokens_lookup()` or `dfm_looup()` to perform sentiment analysis. **quanteda** contains Lexicoder Sentiment Dictionary created by Young and Soroka.
+Dictionary-based analysis is one of the most popular quantitative text analysis methods. You can define keys and values of a dictionary using `dictionary()` (it also import the Wordstat, LIWC, Yoshicoder, Lexicoder and YAML formats through `file` argument).
+
+```{r}
+dict <- dictionary(list(positive = c('good', 'nice', 'excellent'), 
+                        negative = c('bad', 'nasty', 'poor')))
+print(dict)
+```
+
+You can use `tokens_lookup()` or `dfm_looup()` to count dictionary values. **quanteda** contains Lexicoder Sentiment Dictionary created by Young and Soroka, so you can perfrom sentiment analysis of English texts right away.
 
 ```{r}
 lengths(data_dictionary_LSD2015)
